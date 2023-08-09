@@ -243,9 +243,7 @@ function checkAndPreventExtensions(obj) {
   if (Object.isExtensible(obj)) {
     Object.preventExtensions(obj);
   }
-  if (Object.isExtensible(obj)) {
-    return obj;
-  }
+  return Object.isExtensible(obj);
 }
 console.log("Завдання: 8 ==============================");
 console.log(checkAndPreventExtensions({ a: 1, b: 2 })); // Виведе false
@@ -321,7 +319,7 @@ function getObjectValuesSum(obj) {
   // Отримуємо всі значення об'єкта
   // Обчислюємо суму значень
   // Повертаємо суму
-  if (typeof obj !== "object") {
+  if (typeof obj !== "object" && obj === null) {
     return 0;
   }
   const values = Object.values(obj);
@@ -354,7 +352,23 @@ function convertArrayToObj(arr) {
   if (!Array.isArray(arr)) {
     return {};
   }
-  let emptyObject = {};
+  let obj = {};
+  // Проходимося по кожному підмасиву в масиві за допопмогою циклу for, лічильник від нуля до довжини масиву
+  for (let i = 0; i < arr.length; i++) {
+    // Розпаковуємо підмасив за допомогою деструктурізації на окремі змінні для ключа та значення
+    const [key, value] = arr[i];
+
+    // Перевіряємо, чи існує вже ключ в об'єкті,якщо так виводимо в консоль повідомлення `У масиві є дубльований ключ: ${key}`
+    if (obj.hasOwnProperty(key)) {
+      console.log(`У масиві є дубльований ключ: ${key}`);
+    }
+
+    // Додаємо ключ та значення до об'єкта
+    obj[key] = value;
+  }
+
+  // Застосовуємо метод Object.fromEntries() для створення об'єкта
+  return Object.fromEntries(arr);
 }
 
 console.log("Завдання: 12 ==============================");
